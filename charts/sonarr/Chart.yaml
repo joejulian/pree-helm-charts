@@ -4,7 +4,7 @@ description: Smart PVR for newsgroup and bittorrent users
 type: application
 version: 1.11.1
 # renovate: image=ghcr.io/home-operations/sonarr
-appVersion: "4.0.15.2940"
+appVersion: "4.0.16.2943"
 keywords:
   - sonarr
   - servarr
