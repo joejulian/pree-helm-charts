@@ -4,7 +4,7 @@ description: Open source home automation that puts local control and privacy fir
 type: application
 version: 1.60.2
 # renovate: image=ghcr.io/home-assistant/home-assistant
-appVersion: "2025.6.3"
+appVersion: "2025.12.4"
 keywords:
   - home-assistant
   - hass
