@@ -23,4 +23,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           RENOVATE_TOKEN: ${{ github.token }}
           RENOVATE_REPOSITORIES: ${{ github.repository }}
-          RENOVATE_ALLOWED_COMMANDS: '^bump-chart$|^helm-docs --template-files _templates/helm-docs/README\.md\.gotmpl$|^gomplate -o README\.md -f _templates/readme/README\.md\.gotmpl -d readme=_templates/readme/README\.yaml$'
+          RENOVATE_ALLOWED_COMMANDS: '.*'
