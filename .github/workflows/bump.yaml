@@ -48,37 +48,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Prepare base Chart.yaml
-        id: base
-        run: |
-          set -euo pipefail
-          BASE_BRANCH="main"
-          CHART_DIR="${{ matrix.chart }}"
-          CHART_YAML="${CHART_DIR}/Chart.yaml"
-
-          git fetch --no-tags origin "${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}"
-
-          if ! git show "origin/${BASE_BRANCH}:${CHART_YAML}" >/dev/null 2>&1; then
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          base_tmp="$(mktemp)"
-          git show "origin/${BASE_BRANCH}:${CHART_YAML}" > "${base_tmp}"
-
-          echo "exists=true" >> "$GITHUB_OUTPUT"
-          echo "base_tmp=${base_tmp}" >> "$GITHUB_OUTPUT"
-
-      - name: Bump chart
-        if: steps.base.outputs.exists == 'true'
-        uses: joejulian/helm-chart-bumper-action@v0.0.4
+      - name: Bump Chart.yaml version
+        id: bump
+        uses: joejulian/helm-chart-bumper-action@v0.0.5
         with:
-          base: ${{ steps.base.outputs.base_tmp }}/Chart.yaml
+          base_ref: origin/${{ github.event.repository.default_branch }}
           cur: ${{ matrix.chart }}/Chart.yaml
           write: "true"
 
       - name: Create PR
-        if: steps.base.outputs.exists == 'true'
+        if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
