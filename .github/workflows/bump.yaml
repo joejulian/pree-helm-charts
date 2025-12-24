@@ -14,47 +14,75 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  bump:
+  discover-charts:
     runs-on: ubuntu-latest
+    outputs:
+      charts: ${{ steps.discover.outputs.charts }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - id: discover
+        run: |
+          set -euo pipefail
+
+          charts=$(find charts \
+            -mindepth 1 -maxdepth 1 \
+            -type d \
+            -exec test -f "{}/Chart.yaml" \; \
+            -print \
+            | sort \
+            | jq -R -s -c 'split("\n")[:-1]')
+
+          echo "charts=${charts}" >> "$GITHUB_OUTPUT"
+
+  bump:
+    needs: discover-charts
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        chart: ${{ fromJSON(needs.discover-charts.outputs.charts) }}
+
+    steps:
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Option A: run your action (recommended once you’ve tagged it, e.g. v0)
-      - name: Run bumper
-        uses: joejulian/helm-chart-bumper-action@v0.0.3
-        with:
-          github_token: ${{ github.token }}
-          charts_dir: charts
-          base_branch: main
-          pr_branch: automation/bump-charts
-          pr_title: "chore: bump chart deps/images"
-          pr_labels: "dependencies"
-
-      - name: Create or update PR
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ github.token }}
-          branch: automation/bump-charts
-          delete-branch: true
-          title: "chore: bump chart deps/images"
-          commit-message: "chore: bump chart deps/images"
-          body: |
-            Automated bump:
-            - Updates image tags found via rendered manifests
-            - Updates Chart.yaml appVersion + dependency versions
-            - Bumps Chart.yaml version (major/minor/patch) according to semver rules
-          labels: |
-            dependencies
-          signoff: false
-
-      # Enable GitHub auto-merge (merge happens after required checks pass)
-      - name: Enable auto-merge
-        if: steps.create-pull-request.outputs.pull-request-number != ''
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Prepare base Chart.yaml
+        id: base
         run: |
-          pr="${{ steps.create-pull-request.outputs.pull-request-number }}"
-          gh pr merge "$pr" --auto --squash
+          set -euo pipefail
+          BASE_BRANCH="main"
+          CHART_DIR="${{ matrix.chart }}"
+          CHART_YAML="${CHART_DIR}/Chart.yaml"
+
+          git fetch --no-tags origin "${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}"
+
+          if ! git show "origin/${BASE_BRANCH}:${CHART_YAML}" >/dev/null 2>&1; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          base_tmp="$(mktemp)"
+          git show "origin/${BASE_BRANCH}:${CHART_YAML}" > "${base_tmp}"
+
+          echo "exists=true" >> "$GITHUB_OUTPUT"
+          echo "base_tmp=${base_tmp}" >> "$GITHUB_OUTPUT"
+
+      - name: Bump chart
+        if: steps.base.outputs.exists == 'true'
+        uses: joejulian/helm-chart-bumper-action@v0
+        with:
+          base: ${{ steps.base.outputs.base_tmp }}
+          cur: ${{ matrix.chart }}/Chart.yaml
+          write: "true"
+
+      - name: Create PR
+        if: steps.base.outputs.exists == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/bump-${{ matrix.chart }}
+          commit-message: "chore(${{ matrix.chart }}): bump chart"
+          title: "chore(${{ matrix.chart }}): bump chart"
+          labels: dependencies
