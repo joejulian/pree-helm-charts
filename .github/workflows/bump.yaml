@@ -50,7 +50,7 @@ jobs:
 
       - name: Bump Chart.yaml version
         id: bump
-        uses: joejulian/helm-chart-bumper-action@v0.0.5
+        uses: joejulian/helm-chart-bumper-action@v0.0.12
         with:
           base_ref: origin/${{ github.event.repository.default_branch }}
           cur: ${{ matrix.chart }}/Chart.yaml
