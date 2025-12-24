@@ -1,0 +1,60 @@
+name: Bump charts (images + deps)
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Option A: run your action (recommended once you’ve tagged it, e.g. v0)
+      - name: Run bumper
+        uses: joejulian/helm-chart-bumper-action@v0.0.3
+        with:
+          github_token: ${{ github.token }}
+          charts_dir: charts
+          base_branch: main
+          pr_branch: automation/bump-charts
+          pr_title: "chore: bump chart deps/images"
+          pr_labels: "dependencies"
+
+      - name: Create or update PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          branch: automation/bump-charts
+          delete-branch: true
+          title: "chore: bump chart deps/images"
+          commit-message: "chore: bump chart deps/images"
+          body: |
+            Automated bump:
+            - Updates image tags found via rendered manifests
+            - Updates Chart.yaml appVersion + dependency versions
+            - Bumps Chart.yaml version (major/minor/patch) according to semver rules
+          labels: |
+            dependencies
+          signoff: false
+
+      # Enable GitHub auto-merge (merge happens after required checks pass)
+      - name: Enable auto-merge
+        if: steps.create-pull-request.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr="${{ steps.create-pull-request.outputs.pull-request-number }}"
+          gh pr merge "$pr" --auto --squash

@@ -1,14 +1,17 @@
-name: Release Charts
+---
+name: Publish charts to GHCR (OCI)
 
 on:
   push:
     branches:
-      - master
+      - main
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  release:
-    permissions:
-      contents: write
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,23 +19,44 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Install Helm
+      - name: Set up Helm
         uses: azure/setup-helm@v4
-
-      - name: Install dependencies
-        run: |
-          helm repo add adfinis https://charts.adfinis.com
-          helm repo add bjw-s https://bjw-s-labs.github.io/helm-charts/
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.7.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          config: cr.yaml
+          version: v3.14.4
+
+      - name: Login to GHCR
+        env:
+          HELM_EXPERIMENTAL_OCI: "1"
+        run: |
+          echo "${{ github.token }}" | helm registry login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Publish changed charts
+        env:
+          REGISTRY: oci://ghcr.io/joejulian/charts
+        run: |
+          set -euo pipefail
+
+          before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+
+          # Find chart directories touched by this push
+          charts=$(
+            git diff --name-only "$before" "$after" \
+              | awk -F/ '$1=="charts" && $2!="" {print $2}' \
+              | sort -u
+          )
+
+          if [[ -z "${charts}" ]]; then
+            echo "No chart changes detected."
+            exit 0
+          fi
+
+          for c in $charts; do
+            dir="charts/$c"
+            [[ -f "$dir/Chart.yaml" ]] || continue
+
+            echo "Publishing $dir"
+            helm dependency update "$dir"
+            pkg="$(helm package "$dir" --destination /tmp | awk '{print $NF}')"
+            helm push "$pkg" "$REGISTRY"
+          done
