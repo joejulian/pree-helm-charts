@@ -71,9 +71,9 @@ jobs:
 
       - name: Bump chart
         if: steps.base.outputs.exists == 'true'
-        uses: joejulian/helm-chart-bumper-action@v0.0.3
+        uses: joejulian/helm-chart-bumper-action@v0.0.4
         with:
-          base: ${{ steps.base.outputs.base_tmp }}
+          base: ${{ steps.base.outputs.base_tmp }}/Chart.yaml
           cur: ${{ matrix.chart }}/Chart.yaml
           write: "true"
 
