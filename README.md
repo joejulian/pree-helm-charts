@@ -43,13 +43,6 @@ Prowlarr is an indexer manager/proxy built on the popular *arr .net/reactjs base
 A fork of Sonarr to work with movies à la Couchpotato
 
 [<img alt="radarr" src="https://raw.githubusercontent.com/Radarr/Radarr/develop/Logo/512.png" width="128">](charts/radarr)
-#### [readarr](charts/readarr) chart
-
-![Version: 1.1.x](https://img.shields.io/badge/version-1.1.x-brightgreen) ![App version: 0.x](https://img.shields.io/badge/app%20version-0.x-brightgreen)
-
-Book Manager and Automation (Sonarr for Ebooks)
-
-[<img alt="readarr" src="https://raw.githubusercontent.com/Readarr/Readarr/develop/Logo/512.png" width="128">](charts/readarr)
 #### [sonarr](charts/sonarr) chart
 
 ![Version: 1.1.x](https://img.shields.io/badge/version-1.1.x-brightgreen) ![App version: 4.0.x](https://img.shields.io/badge/app%20version-4.0.x-brightgreen)
@@ -68,14 +61,11 @@ for more in-depth information.
 
 | Chart | Description | Version |
 | ----- | ----------- | ------- |
-| [ha-apps](charts/ha-apps) | Argo CD app-of-apps config for home automation applications | ![Version: 0.x](https://img.shields.io/badge/version-0.x-brightgreen) |
-| [media-apps](charts/media-apps) | Argo CD app-of-apps config for media applications | ![Version: 0.x](https://img.shields.io/badge/version-0.x-brightgreen) |
 
 #### more charts
 
 | Chart | Description | Version | App Version |
 | ----- | ----------- | ------- | ----------- |
-| [nfs-mount](charts/nfs-mount) | NFS mount to access already pres... | ![Version: 0.x](https://img.shields.io/badge/version-0.x-brightgreen) |  ![App version: 0.x](https://img.shields.io/badge/app%20version-0.x-brightgreen) |
 
 ## Contributing
 
