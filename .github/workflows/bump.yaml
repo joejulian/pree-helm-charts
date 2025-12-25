@@ -55,6 +55,9 @@ jobs:
           base_ref: origin/${{ github.event.repository.default_branch }}
           cur: ${{ matrix.chart }}/Chart.yaml
           write: "true"
+          update-images: "true"
+          scan-glob: "Chart.yaml"
+          v: 6
 
       - name: Create PR
         if: steps.bump.outputs.changed == 'true'
