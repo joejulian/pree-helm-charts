@@ -2,38 +2,36 @@ apiVersion: v2
 name: home-assistant
 description: Open source home automation that puts local control and privacy first
 type: application
-version: 1.60.2
+version: 1.61.0
 # bump: image=ghcr.io/home-assistant/home-assistant strategy=semver
-appVersion: "2025.6.3"
+appVersion: 2025.12.4
 keywords:
-  - home-assistant
-  - hass
-  - homeassistant
-  - smarthome
+- home-assistant
+- hass
+- homeassistant
+- smarthome
 home: https://github.com/pree/helm-charts/tree/master/charts/home-assistant
 icon: https://raw.githubusercontent.com/home-assistant/home-assistant.io/current/source/images/favicon-192x192.png
 sources:
-  - https://github.com/home-assistant/core
+- https://github.com/home-assistant/core
 maintainers:
-  - name: pree
-    email: pascal@reeb.io
+- name: pree
+  email: pascal@reeb.io
 dependencies:
-  - name: common
-    repository: https://bjw-s-labs.github.io/helm-charts/
-    version: 1.5.1
-  - name: postgresql
-    version: 16.7.24
-    repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
-  - name: mariadb
-    version: 22.0.0
-    repository: https://charts.bitnami.com/bitnami
-    condition: mariadb.enabled
-  - name: influxdb
-    version: 7.1.15
-    repository: https://charts.bitnami.com/bitnami
-    condition: influxdb.enabled
+- name: common
+  repository: https://bjw-s-labs.github.io/helm-charts/
+  version: 1.5.1
+- name: postgresql
+  version: 16.7.24
+  repository: https://charts.bitnami.com/bitnami
+  condition: postgresql.enabled
+- name: mariadb
+  version: 22.0.0
+  repository: https://charts.bitnami.com/bitnami
+  condition: mariadb.enabled
+- name: influxdb
+  version: 7.1.15
+  repository: https://charts.bitnami.com/bitnami
+  condition: influxdb.enabled
 annotations:
-  artifacthub.io/changes: |
-    - kind: changed
-      description: use template to generate README.md
+  artifacthub.io/changes: "- kind: changed\n  description: use template to generate README.md\n"
