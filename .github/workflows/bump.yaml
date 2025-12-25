@@ -1,4 +1,4 @@
-name: Bump charts (images + deps)
+---
 
 on:
   schedule:
@@ -50,14 +50,14 @@ jobs:
 
       - name: Bump Chart.yaml version
         id: bump
-        uses: joejulian/helm-chart-bumper-action@v0.0.12
+        uses: joejulian/helm-chart-bumper-action@v0.0.13
         with:
           base_ref: origin/${{ github.event.repository.default_branch }}
           cur: ${{ matrix.chart }}/Chart.yaml
           write: "true"
-          update-images: "true"
-          scan-glob: "Chart.yaml"
-          v: 6
+          update_images: "true"
+          scan_glob: "Chart.yaml"
+          log_level: "6"
 
       - name: Create PR
         if: steps.bump.outputs.changed == 'true'
