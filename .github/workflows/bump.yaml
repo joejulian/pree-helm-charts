@@ -56,7 +56,7 @@ jobs:
           cur: ${{ matrix.chart }}/Chart.yaml
           write: "true"
           update_images: "true"
-          scan_glob: "Chart.yaml"
+          scan_glob: "Chart.yaml,values*.yaml"
           log_level: "6"
 
       - name: Create PR
