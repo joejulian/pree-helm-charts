@@ -3,7 +3,7 @@ name: radarr
 description: A fork of Sonarr to work with movies à la Couchpotato
 type: application
 version: 1.24.1
-# renovate: image=ghcr.io/home-operations/radarr
+# bump: image=ghcr.io/home-operations/radarr strategy=semver
 appVersion: "5.27.3.10153"
 keywords:
   - radarr

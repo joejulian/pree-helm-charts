@@ -3,7 +3,7 @@ name: sonarr
 description: Smart PVR for newsgroup and bittorrent users
 type: application
 version: 1.11.1
-# renovate: image=ghcr.io/home-operations/sonarr
+# bump: image=ghcr.io/home-operations/sonarr strategy=semver
 appVersion: "4.0.15.2940"
 keywords:
   - sonarr
