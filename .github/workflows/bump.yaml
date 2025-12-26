@@ -63,11 +63,14 @@ jobs:
         if: steps.bump.outputs.changed == 'true'
         uses: losisin/helm-docs-github-action@v1
 
-      - name: Update README.md
+      - name: Setup gomplate
         if: steps.bump.outputs.changed == 'true'
         uses: jason-dour/action-setup-gomplate@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update README.md
+        if: steps.bump.outputs.changed == 'true'
         run: gomplate -o README.md -f _templates/readme/README.md.gotmpl -d readme=_templates/readme/README.yaml
 
       - name: Create PR
