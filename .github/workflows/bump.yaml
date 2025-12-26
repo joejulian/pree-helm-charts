@@ -65,7 +65,7 @@ jobs:
 
       - name: Setup gomplate
         if: steps.bump.outputs.changed == 'true'
-        uses: jason-dour/action-setup-gomplate@v1.0.0
+        uses: jason-dour/action-setup-gomplate@81b9ca6f49d6594a118d19f0d05f6fd05372e64c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
