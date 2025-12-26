@@ -2,7 +2,7 @@ apiVersion: v2
 name: home-assistant
 description: Open source home automation that puts local control and privacy first
 type: application
-version: 1.61.0
+version: 2.0.0
 # bump: image=ghcr.io/home-assistant/home-assistant strategy=semver
 appVersion: 2025.12.4
 keywords:
@@ -20,7 +20,7 @@ maintainers:
 dependencies:
 - name: common
   repository: https://bjw-s-labs.github.io/helm-charts/
-  version: 1.5.1
+  version: '~4'
 - name: postgresql
   version: 16.7.24
   repository: https://charts.bitnami.com/bitnami
