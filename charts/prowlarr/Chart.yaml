@@ -4,25 +4,23 @@ description: Prowlarr is an indexer manager/proxy built on the popular *arr .net
 type: application
 version: 1.49.1
 # bump: image=ghcr.io/home-operations/prowlarr strategy=semver
-appVersion: "2.0.2.5116"
+appVersion: 2.3.1
 keywords:
-  - prowlarr
-  - servarr
-  - torrent
-  - usenet
+- prowlarr
+- servarr
+- torrent
+- usenet
 home: https://github.com/pree/helm-charts/tree/master/charts/prowlarr
 icon: https://raw.githubusercontent.com/Prowlarr/Prowlarr/develop/Logo/512.png
 sources:
-  - https://github.com/Prowlarr/Prowlarr
-  - https://github.com/home-operations/containers
+- https://github.com/Prowlarr/Prowlarr
+- https://github.com/home-operations/containers
 maintainers:
-  - name: pree
-    email: pascal@reeb.io
+- name: pree
+  email: pascal@reeb.io
 dependencies:
-  - name: common
-    repository: https://bjw-s-labs.github.io/helm-charts/
-    version: 1.5.1
+- name: common
+  repository: https://bjw-s-labs.github.io/helm-charts/
+  version: 1.5.1
 annotations:
-  artifacthub.io/changes: |
-    - kind: changed
-      description: use template to generate README.md
+  artifacthub.io/changes: "- kind: changed\n  description: use template to generate README.md\n"
