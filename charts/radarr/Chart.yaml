@@ -4,25 +4,23 @@ description: A fork of Sonarr to work with movies à la Couchpotato
 type: application
 version: 1.24.1
 # bump: image=ghcr.io/home-operations/radarr strategy=semver
-appVersion: "5.27.3.10153"
+appVersion: "6.1"
 keywords:
-  - radarr
-  - servarr
-  - torrent
-  - usenet
+- radarr
+- servarr
+- torrent
+- usenet
 home: https://github.com/pree/helm-charts/tree/master/charts/radarr
 icon: https://raw.githubusercontent.com/Radarr/Radarr/develop/Logo/512.png
 sources:
-  - https://github.com/Radarr/Radarr
-  - https://github.com/home-operations/containers
+- https://github.com/Radarr/Radarr
+- https://github.com/home-operations/containers
 maintainers:
-  - name: pree
-    email: pascal@reeb.io
+- name: pree
+  email: pascal@reeb.io
 dependencies:
-  - name: common
-    repository: https://bjw-s-labs.github.io/helm-charts/
-    version: 1.5.1
+- name: common
+  repository: https://bjw-s-labs.github.io/helm-charts/
+  version: 1.5.1
 annotations:
-  artifacthub.io/changes: |
-    - kind: changed
-      description: use template to generate README.md
+  artifacthub.io/changes: "- kind: changed\n  description: use template to generate README.md\n"
